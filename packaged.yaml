@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'mycast
+
+  A short description of the project
+
+  '
+Globals:
+  Function:
+    Timeout: 5
+Resources:
+  FirstFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://mycast-lambda-source/4387afd0a32e9b18ea98908d4afaad10
+      Handler: app.lambda_handler
+      Runtime: python3.6
+      Events:
+        CatchAll:
+          Type: Api
+          Properties:
+            Path: /video/
+            Method: POST
+      Environment:
+        Variables:
+          PARAM1: VALUE
+  FirstFunctionAdditionalPermission:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: root
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action: ssm:GetParameters
+          Resource: '*'
+      Roles:
+      - Ref: FirstFunctionRole
+Outputs:
+  FirstApigwURL:
+    Description: API Gateway endpoint URL for Prod environment for First Function
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/first/proxy
+  FirstFunction:
+    Description: First Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - FirstFunction
+      - Arn
