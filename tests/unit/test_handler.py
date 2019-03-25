@@ -1,6 +1,6 @@
 import pytest
 
-from download import app
+from receiver import app
 
 
 @pytest.fixture()
@@ -121,3 +121,5 @@ def test_should_return_400_if_no_url_in_body(gw_event_complete):
 def test_should_return_400_if_invalid_url_in_body(gw_event_invalid_url):
     ret = app.lambda_handler(gw_event_invalid_url, "")
     assert ret['statusCode'] == 400
+
+

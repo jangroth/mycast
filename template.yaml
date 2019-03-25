@@ -16,7 +16,7 @@ Resources:
     FirstFunction:
         Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
         Properties:
-            CodeUri: download/build/
+            CodeUri: receiver/build/
             Handler: app.lambda_handler
             Runtime: python3.6 # https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html
             Events:

@@ -26,7 +26,7 @@ As you've chosen the experimental Makefile we can use Make to automate Packaging
         make test
 
         ...::: Creates local dev environment for Python hot-reloading w/ packages:::...
-        make build SERVICE="download"
+        make build SERVICE="receiver"
 
         ...::: Run SAM Local API Gateway :::...
         make run
@@ -57,7 +57,7 @@ AWS Lambda Python runtime requires a flat folder with all dependencies including
     FirstFunction:
         Type: AWS::Serverless::Function
         Properties:
-            CodeUri: download
+            CodeUri: receiver
             ...
 ```
 

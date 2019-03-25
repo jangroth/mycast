@@ -1,10 +1,10 @@
 import logging
+import tempfile
 
-import pytube
 import validators
+from pytube import YouTube
 
 # Global variables are reused across execution contexts (if available)
-# from pytube import YouTube
 
 root = logging.getLogger()
 if root.handlers:
@@ -16,6 +16,18 @@ logging.basicConfig(
 logger = logging.getLogger()
 logging.getLogger('boto3').setLevel(logging.ERROR)
 logging.getLogger('botocore').setLevel(logging.ERROR)
+
+
+class YoutubeToS3:
+    def __init__(self, url, bucket_name):
+        self.url = url
+        self.bucket_name = bucket_name
+        self.base_dir = tempfile.mkdtemp()
+
+    def run(self):
+        streams = YouTube(self.url).streams
+        streams.filter(only_audio=True)
+        pass
 
 
 class ProcessingError(Exception):
@@ -43,15 +55,6 @@ def _create_response(status_code, text):
 
 def _get_bucket_name():
     return 'TODO'
-
-
-class YoutubeToS3:
-    def __init__(self, url, bucket_name):
-        self.url = url
-        self.bucket_name = bucket_name
-
-    def run(self):
-        pass
 
 
 def lambda_handler(event, context):
