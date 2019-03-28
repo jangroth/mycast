@@ -4,7 +4,7 @@ from receiver import app
 
 
 @pytest.fixture()
-def gw_event_complete():
+def event_template():
     """ Generates API GW Event"""
 
     return {
@@ -85,41 +85,41 @@ def gw_event_complete():
 
 
 @pytest.fixture()
-def gw_event_empty():
+def event_empty():
     return {}
 
 
 @pytest.fixture()
-def gw_event_invalid_url():
-    return {
+def event_invalid_url(event_template):
+    event_template.update({
         "body": {"url": "haus"}
-    }
+    })
+    return event_template
 
 
 @pytest.fixture()
-def gw_event_valid_url():
-    return {
+def event_valid_url(event_template):
+    event_template.update({
         "body": {"url": "https://www.youtube.com/watch?v=9bZkp7q19f0"}
-    }
+    })
+    return event_template
 
 
-def test_should_return_200_on_valid_request(gw_event_valid_url):
-    ret = app.lambda_handler(gw_event_valid_url, "")
+def test_should_return_200_on_valid_request(event_valid_url):
+    ret = app.lambda_handler(event_valid_url, "")
     assert ret['statusCode'] == 200
 
 
-def test_should_return_400_on_empty_request(gw_event_empty):
-    ret = app.lambda_handler(gw_event_empty, "")
+def test_should_return_400_on_empty_request(event_empty):
+    ret = app.lambda_handler(event_empty, "")
     assert ret['statusCode'] == 400
 
 
-def test_should_return_400_if_no_url_in_body(gw_event_complete):
-    ret = app.lambda_handler(gw_event_complete, "")
+def test_should_return_400_if_no_url_in_body(event_template):
+    ret = app.lambda_handler(event_template, "")
     assert ret['statusCode'] == 400
 
 
-def test_should_return_400_if_invalid_url_in_body(gw_event_invalid_url):
-    ret = app.lambda_handler(gw_event_invalid_url, "")
+def test_should_return_400_if_invalid_url_in_body(event_invalid_url):
+    ret = app.lambda_handler(event_invalid_url, "")
     assert ret['statusCode'] == 400
-
-
