@@ -23,6 +23,9 @@ class Downloader:
         self._progress_percent = 0
         self._bucket = boto3.resource('s3').Bucket(bucket_name)
 
+    def _get_youtube_object(self):
+        return YouTube(self.url)
+
     def _on_progress(self, stream, chunk, file_handle, bytes_remaining):
         percent_done = 100 - round(bytes_remaining / self._total_size * 100)
         if abs(percent_done - self._progress_percent) > 10:
@@ -55,6 +58,6 @@ class Downloader:
 
 
 if __name__ == '__main__':
-    url = os.getenv('URL', default='https://www.youtube.com/watch?v=4bJ0dvAl98k')
+    url = os.getenv('URL', 'https://www.youtube.com/watch?v=4bJ0dvAl98k')
     bucket_name = os.getenv('BUCKET_NAME', 'mycast-streams')
     Downloader(url=url, bucket_name=bucket_name).run()
