@@ -5,8 +5,6 @@ from receiver import app
 
 @pytest.fixture()
 def event_template():
-    """ Generates API GW Event"""
-
     return {
         "body": {"test": "body"},
         "resource": "/{proxy+}",

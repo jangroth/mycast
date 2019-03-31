@@ -7,7 +7,7 @@ from pytube import YouTube
 logging.basicConfig(
     format='%(asctime)s %(name)-25s %(levelname)-8s %(message)s',
     level=logging.INFO)
-log = logging.getLogger()
+LOG = logging.getLogger()
 logging.getLogger('boto3').setLevel(logging.ERROR)
 logging.getLogger('botocore').setLevel(logging.ERROR)
 
@@ -35,22 +35,22 @@ class Downloader:
     def _on_progress(self, stream, chunk, file_handle, bytes_remaining):
         percent_done = 100 - round(bytes_remaining / self._total_size * 100)
         if abs(percent_done - self._progress_percent) > 10:
-            log.info('{}% done...'.format(percent_done))
+            LOG.info('{}% done...'.format(percent_done))
             self._progress_percent = percent_done
 
     def _upload_to_s3(self, file_name):
-        log.info('Uploading "{}" into bucket "{}"'.format(file_name, self.bucket_name))
+        LOG.info('Uploading "{}" into bucket "{}"'.format(file_name, self.bucket_name))
         self._bucket.upload_file(file_name, 'streams/{}'.format(file_name))
 
     def _download_audio(self):
-        log.info('Requesting download from {}...'.format(self.url))
+        LOG.info('Requesting download from {}...'.format(self.url))
         youtube = self._get_youtube_object()
         stream = self._get_audio_stream(youtube)
-        log.info('Starting download of "{}"...'.format(youtube.title))
+        LOG.info('Starting download of "{}"...'.format(youtube.title))
         downloaded_file = stream.download()
-        log.info('Starting upload into bucket "{}"'.format(self.bucket_name))
+        LOG.info('Starting upload into bucket "{}"'.format(self.bucket_name))
         self._upload_to_s3(downloaded_file)
-        log.info('Done')
+        LOG.info('Done')
 
     def run(self):
         self._download_audio()

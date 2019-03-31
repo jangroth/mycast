@@ -6,16 +6,12 @@ from pytube import YouTube
 
 # Global variables are reused across execution contexts (if available)
 
-root = logging.getLogger()
-if root.handlers:
-    for handler in root.handlers:
-        root.removeHandler(handler)
 logging.basicConfig(
     format='%(asctime)s %(name)-25s %(levelname)-8s %(message)s',
     level=logging.INFO)
-logger = logging.getLogger()
 logging.getLogger('boto3').setLevel(logging.ERROR)
 logging.getLogger('botocore').setLevel(logging.ERROR)
+LOG = logging.getLogger()
 
 
 class YoutubeToS3:
@@ -58,12 +54,12 @@ def _get_bucket_name():
 
 
 def lambda_handler(event, context):
-    logger.info('Entering handler')
+    LOG.info('Entering handler')
     try:
         url = _get_url(event)
         bucket_name = _get_bucket_name()
     except ProcessingError as p:
-        logger.warning('Exiting with status {} - {}'.format(p.http_return_code, p.message))
+        LOG.warning('Exiting with status {} - {}'.format(p.http_return_code, p.message))
         return _create_response(p.http_return_code, p.message)
 
     YoutubeToS3(url=url, bucket_name=bucket_name).run()
