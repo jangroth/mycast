@@ -1,3 +1,4 @@
 .idea/
-download/build/*
 *.pyc
+download/build/*
+docker/*.py

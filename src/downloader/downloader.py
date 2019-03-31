@@ -11,8 +11,6 @@ LOG = logging.getLogger()
 logging.getLogger('boto3').setLevel(logging.ERROR)
 logging.getLogger('botocore').setLevel(logging.ERROR)
 
-boto3.setup_default_session(profile_name='jan')
-
 
 class Downloader:
     def __init__(self, url, bucket_name):
