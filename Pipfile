@@ -11,6 +11,7 @@ pytube = "*"
 [dev-packages]
 pytest = "*"
 pytest-cov = "*"
+pytest_mock = "*"
 
 [requires]
 python_version = "3.7"
