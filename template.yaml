@@ -1,64 +1,71 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-    mycast
-    
-    A short description of the project
+  mycast
 
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
-Globals:
-    Function:
-        Timeout: 5
+  Converting YouTube videos into a podcast.
 
+#Globals:
+#  Function:
+#    Timeout: 5
 
 Resources:
 
-    FirstFunction:
-        Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-        Properties:
-            CodeUri: receiver/build/
-            Handler: app.lambda_handler
-            Runtime: python3.6 # https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html
-            Events:
-                CatchAll:
-                    Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-                    Properties:
-                        Path: /video/
-                        Method: POST
-            # Policies: # Example inline policy
-            #     - Version: "2012-10-17"
-            #     Statement:
-            #         - Effect: "Allow"
-            #         Action:
-            #             - "ssm:GetParameter"
-            #         Resource:
-            #             - "*"
-            Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
-                Variables:
-                    PARAM1: VALUE
+  MycastStreams:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: 'mycast-streams'
 
-    # Sample policy to add additional permissions to your Lambda
-    FirstFunctionAdditionalPermission:
-        Type: "AWS::IAM::Policy"
-        Properties:
-            PolicyName: "root"
-            PolicyDocument:
-                Version: "2012-10-17"
-                Statement:
-                    -
-                        Effect: "Allow"
-                        Action: "ssm:GetParameters"
-                        Resource: "*"
-            Roles:
-                - !Ref FirstFunctionRole # Sample policy to demonstrate Implicit IAM Role created with SAM
+  MycastEcsRepostitory:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: 'mycast-ecs-repository'
 
-Outputs:
+#  FirstFunction:
+#    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+#    Properties:
+#      CodeUri: receiver/build/
+#      Handler: app.lambda_handler
+#      Runtime: python3.6 # https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html
+#      Events:
+#        CatchAll:
+#          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+#          Properties:
+#            Path: /video/
+#            Method: POST
+#      # Policies: # Example inline policy
+#      #     - Version: "2012-10-17"
+#      #     Statement:
+#      #         - Effect: "Allow"
+#      #         Action:
+#      #             - "ssm:GetParameter"
+#      #         Resource:
+#      #             - "*"
+#      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+#        Variables:
+#          PARAM1: VALUE
+#
+#  # Sample policy to add additional permissions to your Lambda
+#  FirstFunctionAdditionalPermission:
+#    Type: "AWS::IAM::Policy"
+#    Properties:
+#      PolicyName: "root"
+#      PolicyDocument:
+#        Version: "2012-10-17"
+#        Statement:
+#          - Effect: "Allow"
+#            Action: "ssm:GetParameters"
+#            Resource: "*"
+#      Roles:
+#        - !Ref FirstFunctionRole # Sample policy to demonstrate Implicit IAM Role created with SAM
 
-    FirstApigwURL:
-      Description: "API Gateway endpoint URL for Prod environment for First Function"
-      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/first/proxy"
-
-    FirstFunction:
-      Description: "First Lambda Function ARN"
-      Value: !GetAtt FirstFunction.Arn
+#Outputs:
+#
+#  FirstApigwURL:
+#    Description: "API Gateway endpoint URL for Prod environment for First Function"
+#    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/first/proxy"
+#
+#  FirstFunction:
+#    Description: "First Lambda Function ARN"
+#    Value: !GetAtt FirstFunction.Arn
 

@@ -2,11 +2,13 @@
 
 .PHONY: docker-build # - builds container image for downloader.py
 docker-build:
+	$(info [*] Building container image for ECS task)
 	cp ./src/downloader/downloader.py ./docker
 	cd ./docker; docker build -t mycast .
 
 .PHONY: docker-run-local # - runs container image for downloader.py
 docker-run-local:
+	$(info [*] Running ECS task locally locally...)
 	$(eval AWS_ACCESS_KEY_ID=$(shell aws --profile jan configure get aws_access_key_id))
 	$(eval AWS_SECRET_ACCESS_KEY=$(shell aws --profile jan configure get aws_secret_access_key))
 	@docker run \
