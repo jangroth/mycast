@@ -7,8 +7,12 @@ docker_build:
 
 .PHONY: docker_run_local # - runs container image for downloader.py
 docker_run_local:
-	AWS_ACCESS_KEY_ID=$(aws --profile jan configure get aws_access_key_id); \
-	echo "${AWS_ACCESS_KEY_ID}"
+	$(eval AWS_ACCESS_KEY_ID=$(shell aws --profile jan configure get aws_access_key_id))
+	$(eval AWS_SECRET_ACCESS_KEY=$(shell aws --profile jan configure get aws_secret_access_key))
+	@docker run \
+	   -e AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID) \
+	   -e AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY) \
+	   mycast:latest
 
 .PHONY: help # - this help
 help:
