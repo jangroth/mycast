@@ -16,6 +16,21 @@ docker-run-local:
 	   -e AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY) \
 	   mycast:latest
 
+.PHONY: docker-push-to-ecr # - pushes latest image to ecr
+docker-push-to-ecr: docker-login docker-tag-latest
+	$(info [*] Pushing latest image to ecr)
+	docker push 010316939032.dkr.ecr.ap-southeast-2.amazonaws.com/mycast-ecs-repository
+
 .PHONY: help # - this help
 help:
 	@grep '^.PHONY: .* #' Makefile | sed 's/\.PHONY: \(.*\) # \(.*\)/\1 \2/' | expand -t20
+
+docker-tag-latest:
+	$(info [*] Tagging latest image)
+	docker tag mycast:latest 010316939032.dkr.ecr.ap-southeast-2.amazonaws.com/mycast-ecs-repository
+
+docker-login:
+	$(info [*] Logging into ECR)
+	@eval $(ECR_LOGIN)
+
+ECR_LOGIN := eval $$\(aws ecr get-login --region ap-southeast-2 --no-include-email\)
