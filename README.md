@@ -1,7 +1,12 @@
 # MyCast
-Serverless app to download files from YouTube and publish as a private podcast.
+Serverless app to download files from YouTube and publish as a regular podcast.
+
+![](architecture.png)
 
 **WIP**
+
+---
+
 =======
 
 A short description of the project
