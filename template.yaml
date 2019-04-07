@@ -21,6 +21,16 @@ Resources:
     Properties:
       RepositoryName: 'mycast-ecs-repository'
 
+  MycastEcsCluster:
+    Type: "AWS::ECS::Cluster"
+    Properties:
+      ClusterName: mycast-ecs-cluster
+
+  MycastEcsLogGroup:
+    Type: "AWS::Logs::LogGroup"
+    Properties:
+      RetentionInDays: 1
+
 #  FirstFunction:
 #    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
 #    Properties:
